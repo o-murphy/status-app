@@ -7,7 +7,7 @@ docker run -d -p 3000:80 --name o-murphy-status-app-container o-murphy-status-ap
 
 ```DockerCompose
   status:
-    build: ./dev-o-murphy  # Path to the directory containing your Dockerfile
+    build: ./status-app  # Path to the directory containing your Dockerfile
     container_name: o-murphy-status-app-container
     restart: always
     networks:
