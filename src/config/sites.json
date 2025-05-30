@@ -1,0 +1,18 @@
+{
+  "sites": [
+    { "name": "Ballistic calculator", "url": "https://portfolio.o-murphy.net/ebalistyka-web/", "group": "Ballistic calculator" },
+    { "name": "Bullets library Json API", "url": "https://dev.o-murphy.net/a7plib/", "group": "Bullets library" },
+    { "name": "mirror o-murphy.net", "url": "https://dev.o-murphy.net/a7plib/", "isMirror": true, "group": "Bullets library" },
+    { "name": "mirror github", "url": "https://portfolio.o-murphy.net/a7p-lib/", "isMirror": true, "group": "Bullets library" },
+    { "name": "ArcherBC2-web", "url": "https://portfolio.o-murphy.net/archerbc2-web/", "group": "ArcherBC2-web" },
+    { "name": "a7pIndex", "url": "https://portfolio.o-murphy.net/a7pindex/", "group": "a7pIndex" },
+    { "name": "Picatini rail gluing", "url": "https://tvt-tech.github.io/picatini_rail/", "group": "Picatini rail gluing" }
+  ],
+  "groupDescriptions": {
+    "Bullets library": "JSON API for the Bullets library project.",
+    "ArcherBC2-web": "Web interface for the ArcherBC2 project.",
+    "a7pIndex": "Index of various a7p projects and resources.",
+    "Ballistic calculator": "Web-based ballistic trajectory calculator.",
+    "Picatini rail gluing": ""
+  }
+}
