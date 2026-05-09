@@ -1,11 +1,11 @@
 # Базовий образ для збірки Next.js застосунку
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+COPY package*.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 # RUN npm ci --omit=dev
 COPY . .
-RUN npm run build
+RUN yarn build
 
 # Етап для подачі статичного контенту за допомогою Nginx
 FROM nginx:alpine
