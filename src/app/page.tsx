@@ -23,6 +23,7 @@ function SiteStatus({ url, name, isMirror }: SiteStatusProps) {
     const checkStatus = async () => {
       try {
         const response = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+        console.log(response);
         setStatus(response.status);
         setIsOnline(response.ok);
         setError(null);
@@ -134,88 +135,3 @@ export default function App() {
     </div>
   );
 }
-
-// 'use client';
-
-// import { useState, useEffect, JSX } from 'react';
-// import { FiExternalLink } from 'react-icons/fi';
-
-// interface Site {
-//   name: string;
-//   url: string;
-//   subtitle?: string;
-// }
-
-// interface SiteStatusProps extends Site {}
-
-// function SiteStatus({ url, name, subtitle }: SiteStatusProps) {
-//   const [status, setStatus] = useState<number | null>(null);
-//   const [isOnline, setIsOnline] = useState<boolean | null>(null);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     const checkStatus = async () => {
-//       try {
-//         const response = await fetch(url, { method: 'HEAD', redirect: 'follow' });
-//         setStatus(response.status);
-//         setIsOnline(response.ok);
-//         setError(null);
-//       } catch (err: any) {
-//         setStatus(null);
-//         setIsOnline(false);
-//         setError(err.message || 'Error');
-//       }
-//     };
-
-//     checkStatus();
-//     const intervalId = setInterval(checkStatus, 10000);
-//     return () => clearInterval(intervalId);
-//   }, [url]);
-
-//   const getStatusDisplay = (): JSX.Element | string => {
-//     const baseChipClasses = 'inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-bold';
-
-//     if (status === null) return <span className={`${baseChipClasses} bg-yellow-200 text-yellow-800`}>Checking...</span>;
-//     if (status === 301) return <span className={`${baseChipClasses} bg-orange-200 text-orange-800`}>Moved</span>;
-//     if (isOnline) return <span className={`${baseChipClasses} bg-green-200 text-green-800`}>Online ({status})</span>;
-//     return <span className={`${baseChipClasses} bg-red-200 text-red-800`}>Offline ({status || 'ERR'})</span>;
-//   };
-
-//   return (
-//     <a href={url} target="_blank" rel="noopener noreferrer" className="block bg-zinc-800 rounded-md p-4 shadow-md hover:bg-zinc-700 transition duration-200">
-//       <div className="flex items-center justify-between">
-//         <div>
-//           <h3 className="text-lg font-semibold text-white">{name}</h3>
-//           {subtitle && <h4 className="text-sm text-gray-500">{subtitle}</h4>}
-//         </div>
-//         <FiExternalLink className="text-gray-400 text-sm" />
-//       </div>
-//       <p className="text-gray-400 text-sm mt-2">
-//         Status: {getStatusDisplay()}
-//       </p>
-//       {error && <p className="text-red-500 text-sm mt-1">Error: {error}</p>}
-//     </a>
-//   );
-// }
-
-// export default function App() {
-//   const sitesToCheck: Site[] = [
-//     { name: 'Bullets library Json API', url: 'https://dev.o-murphy.net/a7plib/' },
-//     { name: 'Bullets library Json API', url: 'https://portfolio.o-murphy.net/a7p-lib/', subtitle: '(GitHub mirror)' },
-//     { name: 'ArcherBC2-web', url: 'https://portfolio.o-murphy.net/archerbc2-web/', subtitle: '(GitHub mirror)' },
-//     { name: 'a7pIndex', url: 'https://portfolio.o-murphy.net/a7pindex/', subtitle: '(GitHub mirror)' },
-//   ];
-
-//   return (
-//     <div className="bg-zinc-900 min-h-screen py-12">
-//       <div className="container mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-//         <h1 className="text-3xl font-bold text-white text-center mb-6">o-murphy's apps status</h1>
-//         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//           {sitesToCheck.map((site) => (
-//             <SiteStatus key={site.url} url={site.url} name={site.name} subtitle={site.subtitle} />
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
