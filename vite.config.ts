@@ -11,4 +11,9 @@ export default defineConfig({
   server: {
     host: true,
   },
+  build: {
+    // Default "assets" collides with an nginx-proxy-manager location
+    // block that 404s any "/a*" prefixed path on dev.o-murphy.net.
+    assetsDir: "static",
+  },
 });
