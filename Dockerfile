@@ -1,6 +1,7 @@
 # Базовий образ для збірки Vite застосунку
 FROM node:26-alpine AS builder
 WORKDIR /app
+RUN npm install -g yarn
 COPY package*.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
