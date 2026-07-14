@@ -1,6 +1,7 @@
 {
   "sites": [
     { "name": "Ballistic calculator", "url": "https://o-murphy.net/ebalistyka-web/", "group": "Ballistic calculator" },
+    { "name": "Reticles generator", "url": "https://o-murphy.net/bcrg/", "group": "Reticles generator" },
     { "name": "Bullets library Json API", "url": "https://dev.o-murphy.net/a7plib/", "group": "Bullets library" },
     { "name": "mirror o-murphy.net", "url": "https://dev.o-murphy.net/a7plib/", "isMirror": true, "group": "Bullets library" },
     { "name": "mirror github", "url": "https://o-murphy.net/a7p-lib/", "isMirror": true, "group": "Bullets library" },
@@ -10,6 +11,7 @@
   ],
   "groupDescriptions": {
     "Bullets library": "JSON API for the Bullets library project.",
+    "Reticles generator": "Ballistic reticles generator",
     "ArcherBC2-web": "Web interface for the ArcherBC2 project.",
     "a7pIndex": "Index of a7p ballistic profiles.",
     "Ballistic calculator": "Web-based ballistic trajectory calculator.",
