@@ -11,7 +11,7 @@ interface Site {
 interface SiteGroup {
   title: string;
   subtitle?: string;
-  mainSite: Site;
+  mainSite?: Site;
   mirrors: Site[];
 }
 
@@ -22,22 +22,17 @@ const EXTERNAL_LINK_ICON = `
   <line x1="10" y1="14" x2="21" y2="3"></line>
 </svg>`.trim();
 
-const STATUS_CHIP_BASE = "inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-bold";
-
-function updateStatusChip(chip: HTMLSpanElement, status: number | null, isOnline: boolean | null) {
-  if (status === null) {
-    chip.className = `${STATUS_CHIP_BASE} bg-yellow-200 text-yellow-800`;
-    chip.textContent = "Checking...";
-  } else if (status === 301) {
-    chip.className = `${STATUS_CHIP_BASE} bg-orange-200 text-orange-800`;
-    chip.textContent = "Moved";
-  } else if (isOnline) {
-    chip.className = `${STATUS_CHIP_BASE} bg-green-200 text-green-800`;
-    chip.textContent = "Online";
-  } else {
-    chip.className = `${STATUS_CHIP_BASE} bg-red-200 text-red-800`;
-    chip.textContent = `Offline (${status ?? "ERR"})`;
-  }
+function buildStatusBadgeUrl(url: string): string {
+  const params = new URLSearchParams({
+    url,
+    label: "status",
+    up_message: "up",
+    down_message: "down",
+    up_color: "brightgreen",
+    down_color: "red",
+    cacheSeconds: "1",
+  });
+  return `https://img.shields.io/website?${params.toString()}`;
 }
 
 function createSiteStatusElement(site: Site): HTMLAnchorElement {
@@ -48,14 +43,16 @@ function createSiteStatusElement(site: Site): HTMLAnchorElement {
   link.target = "_blank";
   link.rel = "noopener noreferrer";
   link.className = isMirror
-    ? "rounded-md shadow-md hover:bg-zinc-700 transition duration-200 bg-zinc-700 p-3 flex items-center gap-2 flex-grow mr-2 mb-2"
+    ? "rounded-md shadow-md hover:bg-zinc-600 transition duration-200 bg-zinc-700 p-3 flex items-center gap-2 flex-grow mr-2 mb-2"
     : "rounded-md shadow-md hover:bg-zinc-700 transition duration-200 block bg-zinc-800 p-4 flex justify-between mb-2";
 
   const nameContainer = document.createElement("div");
   nameContainer.className = "flex items-center gap-2";
 
   const heading = document.createElement("h4");
-  heading.className = isMirror ? "text-sm text-gray-500 italic" : "text-lg font-semibold text-white";
+  heading.className = isMirror
+    ? "text-sm text-gray-500 italic"
+    : "text-lg font-semibold text-white";
   heading.textContent = name;
 
   const icon = document.createElement("span");
@@ -64,55 +61,106 @@ function createSiteStatusElement(site: Site): HTMLAnchorElement {
 
   nameContainer.append(heading, icon);
 
-  const chip = document.createElement("span");
-  updateStatusChip(chip, null, null);
+  const badge = document.createElement("img");
+  badge.src = buildStatusBadgeUrl(url);
+  badge.alt = `${name} status`;
+  badge.className = "h-5";
 
   const statusContainer = document.createElement("p");
   statusContainer.className = "text-gray-400 text-sm ml-auto";
-  statusContainer.append(chip);
+  statusContainer.append(badge);
 
-  const errorText = document.createElement("p");
-  errorText.className = "text-red-500 text-sm mt-1 hidden basis-full";
-
-  link.append(nameContainer, statusContainer, errorText);
-
-  const checkStatus = async () => {
-    try {
-      const response = await fetch(url, { method: "HEAD", redirect: "follow" });
-      updateStatusChip(chip, response.status, response.ok);
-      errorText.textContent = "";
-      errorText.classList.add("hidden");
-    } catch (err) {
-      updateStatusChip(chip, null, false);
-      const message = err instanceof Error ? err.message : "Error";
-      errorText.textContent = `Error: ${message}`;
-      errorText.classList.remove("hidden");
-    }
-  };
-
-  void checkStatus();
-  setInterval(checkStatus, 10000);
+  link.append(nameContainer, statusContainer);
 
   return link;
 }
 
-function createSiteGroupElement(group: SiteGroup): HTMLDivElement {
-  const container = document.createElement("div");
-  container.className = "bg-zinc-800 rounded-md p-4 shadow-md mb-6";
+function createCompactHeaderRow(
+  mainSite: Site,
+  groupTitle: string,
+): HTMLDivElement {
+  const row = document.createElement("div");
+  row.className = "flex items-center justify-between gap-2";
+
+  const nameContainer = document.createElement("div");
+  nameContainer.className = "flex items-center gap-2 min-w-0";
 
   const title = document.createElement("h2");
-  title.className = "text-xl font-semibold text-white mb-1";
-  title.textContent = group.title;
-  container.append(title);
+  title.className = "text-lg font-semibold text-white truncate";
+  title.textContent = groupTitle;
 
-  if (group.subtitle) {
-    const subtitle = document.createElement("h3");
-    subtitle.className = "text-sm text-gray-400 mb-2";
-    subtitle.textContent = group.subtitle;
-    container.append(subtitle);
+  const icon = document.createElement("span");
+  icon.className = "text-gray-400 text-sm shrink-0";
+  icon.innerHTML = EXTERNAL_LINK_ICON;
+
+  nameContainer.append(title, icon);
+
+  const badge = document.createElement("img");
+  badge.src = buildStatusBadgeUrl(mainSite.url);
+  badge.alt = `${mainSite.name} status`;
+  badge.className = "h-5 shrink-0";
+
+  row.append(nameContainer, badge);
+
+  return row;
+}
+
+function createSiteGroupElement(group: SiteGroup): HTMLElement {
+  const { mainSite } = group;
+  const isRedundantName =
+    mainSite !== undefined && mainSite.name === group.title;
+  const isFullyLinkable =
+    isRedundantName && mainSite !== undefined && group.mirrors.length === 0;
+
+  const container = document.createElement(isFullyLinkable ? "a" : "div");
+  container.className = "bg-zinc-800 rounded-md p-3 shadow-md mb-3 block";
+
+  if (isFullyLinkable && mainSite) {
+    const link = container as HTMLAnchorElement;
+    link.href = mainSite.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.classList.add("hover:bg-zinc-700", "transition", "duration-200");
   }
 
-  container.append(createSiteStatusElement(group.mainSite));
+  if (isRedundantName && mainSite) {
+    const headerRow = createCompactHeaderRow(mainSite, group.title);
+
+    if (isFullyLinkable) {
+      container.append(headerRow);
+    } else {
+      const headerLink = document.createElement("a");
+      headerLink.href = mainSite.url;
+      headerLink.target = "_blank";
+      headerLink.rel = "noopener noreferrer";
+      headerLink.className = "block hover:opacity-80 transition duration-200";
+      headerLink.append(headerRow);
+      container.append(headerLink);
+    }
+
+    if (group.subtitle) {
+      const subtitle = document.createElement("h3");
+      subtitle.className = "text-sm text-gray-400 mt-1";
+      subtitle.textContent = group.subtitle;
+      container.append(subtitle);
+    }
+  } else {
+    const title = document.createElement("h2");
+    title.className = "text-lg font-semibold text-white mb-1";
+    title.textContent = group.title;
+    container.append(title);
+
+    if (group.subtitle) {
+      const subtitle = document.createElement("h3");
+      subtitle.className = "text-sm text-gray-400 mb-2";
+      subtitle.textContent = group.subtitle;
+      container.append(subtitle);
+    }
+
+    if (mainSite) {
+      container.append(createSiteStatusElement(mainSite));
+    }
+  }
 
   if (group.mirrors.length > 0) {
     const mirrorsContainer = document.createElement("div");
@@ -135,13 +183,12 @@ function groupSites(sites: Site[]): SiteGroup[] {
     (grouped[site.group] ??= []).push(site);
   }
 
-  const { groupDescriptions } = appConfig as { groupDescriptions: Record<string, string> };
+  const { groupDescriptions } = appConfig as {
+    groupDescriptions: Record<string, string>;
+  };
 
   return Object.entries(grouped).map(([title, groupedSites]) => {
     const mainSite = groupedSites.find((site) => !site.isMirror);
-    if (!mainSite) {
-      throw new Error(`Group "${title}" has no main site`);
-    }
     const mirrors = groupedSites.filter((site) => site.isMirror);
     return { title, subtitle: groupDescriptions[title], mainSite, mirrors };
   });
@@ -161,7 +208,7 @@ function renderApp(root: HTMLDivElement) {
   heading.textContent = "o-murphy's apps status";
 
   const groupsContainer = document.createElement("div");
-  groupsContainer.className = "space-y-6";
+  groupsContainer.className = "space-y-3";
   for (const group of siteGroups) {
     groupsContainer.append(createSiteGroupElement(group));
   }

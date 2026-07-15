@@ -1,20 +1,61 @@
 {
   "sites": [
-    { "name": "Ballistic calculator", "url": "https://o-murphy.net/ebalistyka-web/", "group": "Ballistic calculator" },
-    { "name": "Reticles generator", "url": "https://o-murphy.net/bcrg/", "group": "Reticles generator" },
-    { "name": "Bullets library Json API", "url": "https://dev.o-murphy.net/a7plib/", "group": "Bullets library" },
-    { "name": "mirror o-murphy.net", "url": "https://dev.o-murphy.net/a7plib/", "isMirror": true, "group": "Bullets library" },
-    { "name": "mirror github", "url": "https://o-murphy.net/a7p-lib/", "isMirror": true, "group": "Bullets library" },
-    { "name": "ArcherBC2-web", "url": "https://o-murphy.net/archerbc2-web/", "group": "ArcherBC2-web" },
-    { "name": "a7pIndex", "url": "https://o-murphy.net/a7pindex/", "group": "a7pIndex" },
-    { "name": "Picatini rail gluing", "url": "https://tvt-tech.github.io/picatini_rail/", "group": "Picatini rail gluing" }
+    {
+      "name": "Ballistic calculator",
+      "url": "https://o-murphy.net/ebalistyka-web/",
+      "group": "Ballistic calculator"
+    },
+    {
+      "name": "Reticles generator",
+      "url": "https://o-murphy.net/bcrg/",
+      "group": "Reticles generator"
+    },
+    {
+      "name": "mirror github",
+      "url": "https://o-murphy.net/a7p-lib/",
+      "isMirror": true,
+      "group": "Bullets library"
+    },
+    {
+      "name": "mirror o-murphy.net",
+      "url": "https://dev.o-murphy.net/a7plib/",
+      "isMirror": true,
+      "group": "Bullets library"
+    },
+    {
+      "name": "Picatini rail gluing",
+      "url": "https://tvt-tech.github.io/picatini_rail/",
+      "group": "Picatini rail gluing"
+    },
+    {
+      "name": "ArcherBC2 Web",
+      "url": "https://o-murphy.net/archerbc2-web/",
+      "group": "ArcherBC2 Web"
+    },
+    {
+      "name": "A7P Index",
+      "url": "https://o-murphy.net/a7pindex/",
+      "group": "A7P Index"
+    },
+    {
+      "name": "py-ballisticcalc",
+      "url": "https://py-ballisticcalc.o-murphy.net/",
+      "group": "py-ballisticcalc"
+    },
+    {
+      "name": "o-murphy.github.io",
+      "url": "https://o-murphy.github.io/",
+      "group": "o-murphy.github.io"
+    }
   ],
   "groupDescriptions": {
-    "Bullets library": "JSON API for the Bullets library project.",
+    "Bullets library": "JSON API for the Bullets library project",
     "Reticles generator": "Ballistic reticles generator",
-    "ArcherBC2-web": "Web interface for the ArcherBC2 project.",
-    "a7pIndex": "Index of a7p ballistic profiles.",
-    "Ballistic calculator": "Web-based ballistic trajectory calculator.",
-    "Picatini rail gluing": ""
+    "ArcherBC2 Web": "Web interface for the ArcherBC2 project",
+    "A7P Index": "Index of .a7p ballistic profiles",
+    "Ballistic calculator": "Web-based ballistic trajectory calculator",
+    "Picatini rail gluing": "",
+    "py-ballisticcalc": "Python ballistics calculation library docs",
+    "o-murphy.github.io": "Personal portfolio site, bound to the o-murphy.net domain"
   }
 }
